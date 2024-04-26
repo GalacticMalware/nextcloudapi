@@ -3,10 +3,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require("cors");
-const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
 const { dbConncet } = require('./database/mysql.conf')
-const a = require('perf_hooks')
+const date = require('perf_hooks')
+const schedule = require('node-schedule');
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
@@ -24,8 +23,14 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, async() => {
     await dbConncet();
     console.log(`El server es http://localhost:${PORT}`);
-    setTimeout(() => {
-        console.log('holamundo')
-    }, 2000);
 
+    const job = async() => {
+        console.log('reporte job');
+        schedule.scheduleJob({ second: 0, minute: 0, hour: 15, dayOfWeek: [0, new schedule.Range(1, 5)] },
+            function() {
+                console.log('se ejecuto = ', new Date().toISOString());
+                httpRequest(process.env.URL_REPORT, 'POST');
+            });
+    }
+    job();
 });

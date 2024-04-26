@@ -21,10 +21,6 @@ const uploadData = async(req, res) => {
             //console.log(req.file)
             originName = req.file.originalname.split('.')[0];
             extension = req.file.mimetype.split('/')[1];
-            console.log('pase aqui')
-            const base64 = fs.readFileSync(pathData, "base64");
-            const buffer = Buffer.from(base64, "base64");
-            console.log(buffer.toString('base64'))
         }
 
         if (base64) {
@@ -59,7 +55,7 @@ const uploadData = async(req, res) => {
 }
 
 const generateView = async(req, res) => {
-    const { url, format } = req.body;
+    const { url, format, config } = req.body;
     const { user, pass, path } = req.body.client;
     let data, auth, tokenCSFR;
     try {
@@ -81,21 +77,19 @@ const generateView = async(req, res) => {
                 tokenCSFR = await generateTokenCSRF(auth);
                 await generateShareLink(url, tokenCSFR, null, auth);
 
-                data = { url: (await publicShareLink(url, tokenCSFR, auth)).url };
+                data = { url: (await publicShareLink(url, tokenCSFR, auth, config)).url };
                 break;
             case 'imgLink':
                 auth = await client.getHeaders().Authorization;
                 tokenCSFR = await generateTokenCSRF(auth);
                 await generateShareLink(url, tokenCSFR, null, auth);
-                const tokenIMG = (await publicShareLink(url, tokenCSFR, auth)).token;
+                const tokenIMG = (await publicShareLink(url, tokenCSFR, auth, config)).token;
 
                 data = {
                     url: `${process.env.URL_SHARE_PREVIEW}${tokenIMG}/preview` //{
                         //option1: `${process.env.URL_IMG_LINK}${tokenIMG}${process.env.URL_COMPLEMENT_IMG}${(await client.getDirectoryContents(url))[0].etag}`,
                         //option2: `
                         //}
-                        //http://104.254.244.123:8080/ocs/v2.php/apps/files_sharing/api/v1/shares/101
-
                 };
                 break;
             default:

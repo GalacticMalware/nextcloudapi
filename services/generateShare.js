@@ -20,7 +20,7 @@ const generateShareLink = async(path, tokenCSRF, tokenGenerate = null, auth = ""
     return await httpRequest(url, "POST", data, tokenCSRF, auth);
 }
 
-const publicShareLink = async(path, tokenCSRF, auth) => {
+const publicShareLink = async(path, tokenCSRF, auth, config = null) => {
     let linkClean = "";
     path.split('/').map((x) => x ? (linkClean += `%2F${x}`) : null);
     const urlShare = `${process.env.URL_SHARING_FORMAT}${linkClean}&reshares=true`;
@@ -32,10 +32,25 @@ const publicShareLink = async(path, tokenCSRF, auth) => {
     for (let i = 0; i < responseLink.length; i++) {
         if (responseLink.length - 1 != i) await httpRequest(`${urlDeleteShares}${responseLink[i].id}`, 'DELETE', {}, tokenCSRF, auth);
     }
+    if (config) {
+        Object.assign(config, { label: responseLink[responseLink.length - 1].label });
+        const responseConfig = await configShareLink(config, tokenCSRF, auth, responseLink[responseLink.length - 1].id);
+    }
 
     await httpRequest(urlShareMe, 'GET', {}, tokenCSRF, auth);
 
     return responseLink[responseLink.length - 1];
+}
+
+const configShareLink = async(config, tokenCSRF, auth, id) => {
+    try {
+        const urlConfig = `${process.env.URL_SHARE_OPTIONS}${id}`;
+        const response = await httpRequest(urlConfig, 'PUT', config, tokenCSRF, auth);
+        if (response.data.ocs.meta.status) return response.data.ocs.meta;
+    } catch (e) {
+        console.log(e);
+        return { status: 'error', statuscode: 500, message: 'error al aplicar configuracion' };
+    }
 }
 
 module.exports = { generateTokenCSRF, generateShareLink, publicShareLink }
