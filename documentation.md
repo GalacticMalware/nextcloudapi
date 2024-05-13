@@ -46,53 +46,33 @@ Javascript, HTML, CSS, NodeJs, Mysql, Php.
 | `base64`      | `string` | **Required**. Data in base64 format  |
 
 
+#### GENERATE FROM SHARED DATA URL
+
+```http
+  POST nextcloud/storage/generateView
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `url`      | `string` | **Require**. URL generated from uploaded data  |
+| `format`      | `string` | **Required**. Type of formats to generate ['shareLink','base64','imgLink']  |
+| `config`      | `object` | **Opcional**. Data sharing settings  |
+{
+    | `permissions`     | `string` | **Optional**. Types of permissions ['17'](Read) - ['19'](Edit)  |
+    | `attributes`      | `string` | **Optional**. Types of permissions ['17'](Read) - ['19'](Edit)  |
+    | `note`      | `string` | **Optional**. Types of permissions ['17'](Read) - ['19'](Edit)  |
+    | `expireDate`      | `string` | **Optional**. Types of permissions ['17'](Read) - ['19'](Edit)  |
+    | `label`      | `string` | **Optional**. Types of permissions ['17'](Read) - ['19'](Edit)  |
+    | `password`      | `string` | **Optional**.  |
+    | `hideDownload`      | `string` | **Optional**.   |
+    
+}
+
+
+
+
+
 
 ## Authors
 
-- [@octokatherine](https://github.com/GalacticMalware)
-
-
-
-
-
-{
-    "folder":"nombre carpeta",
-    "nameImg":"nombre imagen",
-    "base64":"forma de la imagen base64", 
-    "replay":true //si requiere remplazar el documento
-}
-
-
-
-Para generar el token JWT
-https://104.254.244.123/nextcloud/login/generateToken
-{
-    "user":"",
-    "pass":"",
-    "path":""
-}
-
-Para subir la imagen
-https://104.254.244.123/nextcloud/storage/uploadData
-{
-    "folder":"nombre carpeta",
-    "name":"nombre del archivo", 
-    "replay":true //si requiere remplazar el documento
-    "extension":"" //NOTA SI LO DEJA POR DEFAULT, ESTE GENERADA UNO ALEATORIAMENTE
-    "base64":"forma de la imagen base64",
-}
-NOTA: ACEPTA FORMATOS POR MULTIFORMAT HTML CON EL NOMBRE DE ("file");
-
-
-
-Para generar el link de compartir
-https://104.254.244.123/nextcloud/storage/generateView
-{
-    "url":"", //URL EL CUAL DEVUEL LA SUBIDA DE IMAGEN
-    "format":""
-}
-
-formato hay 3
-base64 -- base 64 
-imgLink -- carga de imagen web (NOTA: El nombre del archivo no es el mismo por que lo genera por  token)
-shareLink -- link de compartir img para descargar
+- [@Daniel Alejandro](https://github.com/GalacticMalware)

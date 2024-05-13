@@ -25,10 +25,14 @@ const uploadData = async(req, res) => {
 
         if (base64) {
             const buffer = Buffer.from(base64, "base64");
-            if (extension == "") extension = (buffer.toString()).replace('�', "").split('\r')[0];
+            if (extension == "" || extension == null) extension = (buffer.toString()).replace('�', "").split('\r')[0];
             //extension = base64.split(';')[0].split('/')[1] !== 'png' ? 'png' : extension;
             pathData = `${__dirname}/../uploads/${name}.${extension}`;
-            const base64Data = base64.replace(/^data:image\/png;base64,/, "");
+            let base64Data = base64.split(',')
+            if (base64Data.length >= 2) {
+                base64Data[1]
+            } else base64 = base64;
+            //const base64Data = base64.replace(/^data:image\/png;base64,/, "");
             fs.writeFileSync(`uploads/${name}.${extension}`, base64Data, 'base64');
             originName = name;
         }
