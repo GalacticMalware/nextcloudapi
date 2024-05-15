@@ -15,8 +15,8 @@ app.use(express.static('stogare'));
 //app.use(express.urlencoded({ extended: true }));
 //app.use(express.bodyParser({ limit: '10mb' }));
 
-app.use("/nextcloud/", require('./routes'));
-app.get('/nextcloud/test', (req, res) => res.send('nextcloudapi'));
+app.use("/nextcloud-api/", require('./routes'));
+app.get('/nextcloud-api/test', (req, res) => res.send('nextcloudapi'));
 
 const PORT = process.env.PORT || 3000;
 
