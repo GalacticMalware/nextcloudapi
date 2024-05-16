@@ -104,7 +104,7 @@ const generateView = async(req, res) => {
         return res.json({ status: 'sucess', message: 'Generacion exitosa', data });
     } catch (e) {
         console.log(e)
-        return res.json({ status: 'error', message: typeof e == !'string' ? 'Ocurrio un error inesperado' : e });
+        return res.json({ status: 'error', message: typeof e === 'object' ? 'Ocurrio un error inesperado' : e });
     }
 }
 
